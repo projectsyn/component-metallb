@@ -1,0 +1,3 @@
+parameters:
+  metallb:
+    namespace: syn-metallb

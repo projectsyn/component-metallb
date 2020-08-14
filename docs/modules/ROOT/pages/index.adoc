@@ -1,0 +1,3 @@
+= metallb: A Commodore component to manage metallb
+
+{doctitle} is a Commodore component for Managing metallb.
