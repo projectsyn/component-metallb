@@ -1,5 +1,11 @@
 parameters:
   kapitan:
+    dependencies:
+      - type: git
+        source: git@github.com:bitnami/charts.git
+        subdir: bitnami/metallb
+        ref: ${metallb:charts:metallb}
+        output_path: dependencies/metallb/helmcharts/metallb
     compile:
       - input_paths:
           - metallb/component/app.jsonnet
@@ -9,3 +15,19 @@ parameters:
           - metallb/component/main.jsonnet
         input_type: jsonnet
         output_path: metallb/
+      - output_path: metallb/10_metallb_helmchart
+        input_type: helm
+        output_type: yaml
+        input_paths:
+          - metallb/helmcharts/metallb
+        helm_values:
+          speaker:
+            secretName: ${metallb:speaker:secretname}
+          configInline:
+            address-pools:
+            - name: default
+              protocol: ${metallb:protocol}
+              addresses: ${metallb:addresses}
+        helm_params:
+          release_name: metallb
+          namespace: '${metallb:namespace}'

@@ -1,3 +1,11 @@
 parameters:
   metallb:
     namespace: syn-metallb
+    memberlist_secretkey: ?{vaultkv:${customer:name}/${cluster:name}/metallb-memberlist/secretkey}
+    speaker:
+      secretname: metallb-memberlist
+    protocol: layer2
+    addresses: null
+    ingress_nginx_service: false
+    charts:
+      metallb: '3b436a5ec87ffa0772d3d18a27a90dd7c717581f' # 0.1.23

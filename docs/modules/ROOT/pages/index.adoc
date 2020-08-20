@@ -1,3 +1,28 @@
 = metallb: A Commodore component to manage metallb
 
-{doctitle} is a Commodore component for Managing metallb.
+{doctitle} is a Commodore component for Managing metallb. The component is based on the https://hub.kubeapps.com/charts/bitnami/metallb[Helm Chart] of Bitnami, which is https://github.com/metallb/metallb/issues/653[suggested] to become a template for the official Helm Chart of the project. Currently there is no support of taking over an existing installation executed by the manifests or kustomize.
+
+
+See the xref:references/parameters.adoc[parameters] reference for further details.
+
+
+== Layer2 Mode (default)
+
+For a minimal configuration providing a VIP is required. For specific distributions i.e. Rancher, the loadbalancer ingress-nginx object is created automatically.
+
+```
+parameters:
+  metallb:
+    addresses:
+      - 10.128.1.200/32
+```
+
+As speaker secretkey must be generated and stored inside the secret key management. A pregenerated key ensures, manifests applied multiple times, the secretkey does not change unexpectedly lead to failovers, because the speakers can not communicate anymore during a rollover unsing different secretkeys.
+
+```
+vault kv put -cas=0 kv/${TENANT_ID}/${CLUSTER_ID}/metallb-speaker secretkey="$(openssl rand -base64 128)"
+```
+
+== BGP Mode
+
+MetalLB supports BGP, but this component currently does not support this mode.

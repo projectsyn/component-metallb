@@ -1,0 +1,57 @@
+= Parameters
+
+The parent key for all of the following parameters is `metallb`.
+
+
+== `namespace`
+
+[horizontal]
+type:: string
+default:: `syn-metallb`
+
+The Syn default is `syn-metallb`. The original namespace is `metallb-system`. But there is currently no support from the Helm Chart to takeover an existing installation.
+
+
+== `speaker.secretkey`
+
+[horizontal]
+type:: string
+default:: Vault reference
+
+A binary secretkey encoded base64. It can be generated using the command `openssl rand -base64 128`.
+
+
+== `protocol`
+
+[horizontal]
+type:: string
+default:: `layer2`
+
+MetalLB supports https://metallb.universe.tf/concepts/layer2/[Layer2] `layer2` and https://metallb.universe.tf/concepts/bgp/[BGP] `bgp`. As layer2 is often used on-premis, this is the default.
+
+
+== `addresses`
+
+[horizontal]
+type:: ip list
+default:: null
+
+A list of IPs i.e. `10.128.1.200/32` used as transferable virtual IPs.
+
+
+== `ingress_nginx_service`
+
+[horizontal]
+type:: boolean
+default:: false
+
+Creates a loadbalancer service object called ingress-nginx in the namespace ingress-nginx for port 80 (HTTP) and 433 (HTTPS). As this configuration is only valid for Rancher installations, the default is false.
+
+
+== `charts.metallb`
+
+[horizontal]
+type:: git reference
+default:: `3b436a5ec87ffa0772d3d18a27a90dd7c717581f`'
+
+A git reference like a tag, commit, branch etc.
