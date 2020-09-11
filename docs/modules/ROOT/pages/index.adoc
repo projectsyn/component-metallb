@@ -25,4 +25,4 @@ vault kv put -cas=0 kv/${TENANT_ID}/${CLUSTER_ID}/metallb-speaker secretkey="$(o
 
 == BGP Mode
 
-MetalLB supports BGP, but this component currently does not support this mode.
+This component currently does not allow to configure MetalLB in the BGP mode. 
