@@ -24,11 +24,12 @@ parameters:
       - 10.128.1.200/32
 ```
 
-As speaker secret key must be generated and stored inside the secret key management.
+As memberlist key must be generated and stored inside the secret key management.
+
 A pregenerated key ensures, manifests applied multiple times, the secret key does not change unexpectedly lead to failovers, because the speakers can not communicate anymore during a rollover using different secret keys.
 
 ```
-vault kv put -cas=0 cluster/${TENANT_ID}/${CLUSTER_ID}/kv/metallb-speaker secretkey="$(openssl rand -base64 128)"
+vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist secretkey="$(openssl rand -base64 128)"
 ```
 
 == BGP Mode
