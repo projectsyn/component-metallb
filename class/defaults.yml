@@ -5,6 +5,9 @@ parameters:
     speaker:
       secretname: metallb-memberlist
     protocol: layer2
-    addresses: null
+    address_pools:
+      - name: default
+        protocol: ${metallb:protocol}
+        addresses: ${metallb:addresses}
     charts:
       metallb: '3b436a5ec87ffa0772d3d18a27a90dd7c717581f' # 0.1.23

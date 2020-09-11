@@ -24,10 +24,7 @@ parameters:
           speaker:
             secretName: ${metallb:speaker:secretname}
           configInline:
-            address-pools:
-            - name: default
-              protocol: ${metallb:protocol}
-              addresses: ${metallb:addresses}
+            address-pools: ${metallb:address_pools}
         helm_params:
           release_name: metallb
           namespace: '${metallb:namespace}'
