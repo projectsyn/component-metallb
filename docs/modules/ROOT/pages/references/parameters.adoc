@@ -40,16 +40,6 @@ default:: null
 A list of IPs  (for example `10.128.1.200/32`) used as transferable virtual IPs.
 
 
-== `ingress_nginx_service`
-
-[horizontal]
-type:: boolean
-default:: false
-
-Creates a loadbalancer service object called ingress-nginx in the namespace ingress-nginx for port 80 (HTTP) and 433 (HTTPS).
-As this configuration is only valid for Rancher installations, the default is false.
-
-
 == `charts.metallb`
 
 [horizontal]

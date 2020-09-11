@@ -23,31 +23,8 @@ local memberlist_secret = kube.Secret(params.speaker.secretname) {
   },
 };
 
-// Services
-local ingress_nginx_service = kube.Service('ingress-nginx') {
-  metadata+: {
-    namespace: 'ingress-nginx',
-  },
-  spec: {
-    type: 'LoadBalancer',
-    selector: {
-      app: 'ingress-nginx',
-    },
-    ports: [{
-      name: 'http',
-      port: 80,
-      targetPort: 80,
-    }, {
-      name: 'https',
-      port: 443,
-      targetPort: 443,
-    }],
-  }
-};
-
 // Define outputs below
 {
   '00_namespace': namespace,
   [if params.memberlist_secretkey != "" then '01_memberlist_secret']: memberlist_secret,
-  [if params.ingress_nginx_service then '20_ingress_service']: ingress_nginx_service,
 }
