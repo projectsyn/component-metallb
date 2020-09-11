@@ -11,7 +11,7 @@ local namespace = kube.Namespace(params.namespace) {
       app: 'metallb',
       'app.kubernetes.io/name': 'metallb',
       'app.kubernetes.io/instance': 'metallb',
-    }
+    },
   },
 };
 
@@ -28,5 +28,5 @@ local memberlist_secret = kube.Secret(params.speaker.secretname) {
 // Define outputs below
 {
   '00_namespace': namespace,
-  [if params.memberlist_secretkey != "" then '01_memberlist_secret']: memberlist_secret,
+  [if params.memberlist_secretkey != '' then '01_memberlist_secret']: memberlist_secret,
 }
