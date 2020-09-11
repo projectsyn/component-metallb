@@ -36,7 +36,7 @@ MetalLB supports https://metallb.universe.tf/concepts/layer2/[Layer2] `layer2` a
 type:: ip list
 default:: null
 
-A list of IPs i.e. `10.128.1.200/32` used as transferable virtual IPs.
+A list of IPs  (for example `10.128.1.200/32`) used as transferable virtual IPs.
 
 
 == `ingress_nginx_service`
