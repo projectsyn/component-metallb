@@ -23,8 +23,7 @@ parameters:
         helm_values:
           speaker:
             secretName: ${metallb:speaker:secretname}
-          configInline:
-            address-pools: ${metallb:address_pools}
+          existingConfigMap: ${metallb:configmap_name}
         helm_params:
           release_name: metallb
           namespace: '${metallb:namespace}'

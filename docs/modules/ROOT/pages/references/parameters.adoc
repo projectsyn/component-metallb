@@ -20,24 +20,36 @@ default:: Vault reference
 A binary secret key encoded base64.
 It can be generated using the command `openssl rand -base64 128`.
 
-
-== `protocol`
-
-[horizontal]
-type:: string
-default:: `layer2`
-
-MetalLB supports https://metallb.universe.tf/concepts/layer2/[Layer2] `layer2` and https://metallb.universe.tf/concepts/bgp/[BGP] `bgp`.
-As layer2 is often used on-premis, this is the default.
-
-
 == `addresses`
 
 [horizontal]
 type:: ip list
 default:: null
 
-A list of IPs  (for example `10.128.1.200/32`) used as transferable virtual IPs.
+A list of IPs (for example `10.128.1.200/32`) used as transferable virtual IPs.
+
+
+== `config`
+
+[horizontal]
+type:: yaml config
+default:: null
+
+A custom config can be provided. This overrides the automatic config generation and passes the value direct into the config map.
+
+For example this allows to specify multiple address pools:
+```
+    config:
+      address-pools:
+        - name: pool1
+          protocol: layer2
+          addresses:
+            - 10.128.1.200/32
+        - name: pool2
+          protocol: layer2
+          addresses:
+            - 10.128.2.200/32
+````
 
 
 == `charts.metallb`

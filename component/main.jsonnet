@@ -25,8 +25,26 @@ local memberlist_secret = kube.Secret(params.speaker.secretname) {
   },
 };
 
+local configmap = kube.ConfigMap(params.configmap_name) {
+  metadata+: {
+    namespace: params.namespace,
+  },
+  data: {
+    config: std.manifestYamlDoc(if params.config == null then {
+      "address-pools": [
+        {
+          "name": "default",
+          "protocol": "layer2",
+          "addresses": params.addresses,
+        },
+      ],
+    } else params.config),
+  },
+};
+
 // Define outputs below
 {
   '00_namespace': namespace,
   [if params.memberlist_secretkey != "" then '01_memberlist_secret']: memberlist_secret,
+  '02_configmap': configmap,
 }
