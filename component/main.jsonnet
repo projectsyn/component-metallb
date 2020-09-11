@@ -9,8 +9,8 @@ local namespace = kube.Namespace(params.namespace) {
   metadata+: {
     labels+: {
       app: 'metallb',
-      app.kubernetes.io/name: 'metallb',
-      app.kubernetes.io/instance: 'metallb',
+      'app.kubernetes.io/name': 'metallb',
+      'app.kubernetes.io/instance': 'metallb',
     }
   },
 };
