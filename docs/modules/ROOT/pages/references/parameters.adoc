@@ -23,7 +23,7 @@ It can be generated using the command `openssl rand -base64 128`.
 == `addresses`
 
 [horizontal]
-type:: ip list
+type:: list
 default:: null
 
 A list of IPs (for example `10.128.1.200/32`) used as transferable virtual IPs.
@@ -32,10 +32,12 @@ A list of IPs (for example `10.128.1.200/32`) used as transferable virtual IPs.
 == `config`
 
 [horizontal]
-type:: yaml config
+type:: dictionary
 default:: null
 
-A custom config can be provided. This overrides the automatic config generation and passes the value direct into the config map.
+A custom config can be provided. This overrides the automatic config generation.
+
+NOTE: The passed configuration is not going to be validated by the component.
 
 For example this allows to specify multiple address pools:
 ```
