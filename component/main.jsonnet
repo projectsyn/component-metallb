@@ -7,7 +7,7 @@ local params = inv.parameters.metallb;
 
 local namespace = kube.Namespace(params.namespace) {
   metadata+: {
-    labels: {
+    labels+: {
       app: 'metallb',
     }
   },

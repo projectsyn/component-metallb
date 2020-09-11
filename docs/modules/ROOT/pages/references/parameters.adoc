@@ -9,7 +9,6 @@ The parent key for all of the following parameters is `metallb`.
 type:: string
 default:: `syn-metallb`
 
-The Syn default is `syn-metallb`. The original namespace is `metallb-system`. But there is currently no support from the Helm Chart to takeover an existing installation.
 
 
 == `speaker.secretkey`
@@ -18,7 +17,8 @@ The Syn default is `syn-metallb`. The original namespace is `metallb-system`. Bu
 type:: string
 default:: Vault reference
 
-A binary secretkey encoded base64. It can be generated using the command `openssl rand -base64 128`.
+A binary secret key encoded base64.
+It can be generated using the command `openssl rand -base64 128`.
 
 
 == `protocol`
@@ -27,7 +27,8 @@ A binary secretkey encoded base64. It can be generated using the command `openss
 type:: string
 default:: `layer2`
 
-MetalLB supports https://metallb.universe.tf/concepts/layer2/[Layer2] `layer2` and https://metallb.universe.tf/concepts/bgp/[BGP] `bgp`. As layer2 is often used on-premis, this is the default.
+MetalLB supports https://metallb.universe.tf/concepts/layer2/[Layer2] `layer2` and https://metallb.universe.tf/concepts/bgp/[BGP] `bgp`.
+As layer2 is often used on-premis, this is the default.
 
 
 == `addresses`

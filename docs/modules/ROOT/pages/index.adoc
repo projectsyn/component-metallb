@@ -1,6 +1,13 @@
-= metallb: A Commodore component to manage metallb
+= MetalLB: A Commodore component to manage MetalLB
 
-{doctitle} is a Commodore component for Managing metallb. The component is based on the https://hub.kubeapps.com/charts/bitnami/metallb[Helm Chart] of Bitnami, which is https://github.com/metallb/metallb/issues/653[suggested] to become a template for the official Helm Chart of the project. Currently there is no support of taking over an existing installation executed by the manifests or kustomize.
+{doctitle} is a Commodore component for Managing MetalLB.
+The component is based on the https://hub.kubeapps.com/charts/bitnami/metallb[Helm Chart] of Bitnami.
+The Bitnami Helm Chart is https://github.com/metallb/metallb/issues/653[suggested] to become a template for the official Helm Chart of the project.
+
+[CAUTION]
+====
+Currently there is no support of taking over an existing installation executed by the manifests or Kustomize.
+====
 
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
@@ -8,7 +15,7 @@ See the xref:references/parameters.adoc[parameters] reference for further detail
 
 == Layer2 Mode (default)
 
-For a minimal configuration providing a VIP is required. For specific distributions i.e. Rancher, the loadbalancer ingress-nginx object is created automatically.
+For a minimal configuration providing a VIP is required.
 
 ```
 parameters:
@@ -17,10 +24,11 @@ parameters:
       - 10.128.1.200/32
 ```
 
-As speaker secretkey must be generated and stored inside the secret key management. A pregenerated key ensures, manifests applied multiple times, the secretkey does not change unexpectedly lead to failovers, because the speakers can not communicate anymore during a rollover unsing different secretkeys.
+As speaker secret key must be generated and stored inside the secret key management.
+A pregenerated key ensures, manifests applied multiple times, the secret key does not change unexpectedly lead to failovers, because the speakers can not communicate anymore during a rollover using different secret keys.
 
 ```
-vault kv put -cas=0 kv/${TENANT_ID}/${CLUSTER_ID}/metallb-speaker secretkey="$(openssl rand -base64 128)"
+vault kv put -cas=0 cluster/${TENANT_ID}/${CLUSTER_ID}/kv/metallb-speaker secretkey="$(openssl rand -base64 128)"
 ```
 
 == BGP Mode
