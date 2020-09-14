@@ -48,6 +48,6 @@ local configmap = kube.ConfigMap(params.configmap_name) {
 // Define outputs below
 {
   '00_namespace': namespace,
-  [if params.memberlist_secretkey != "" then '01_memberlist_secret']: memberlist_secret,
+  [if params.memberlist_secretkey != '' then '01_memberlist_secret']: memberlist_secret,
   '02_configmap': configmap,
 }
