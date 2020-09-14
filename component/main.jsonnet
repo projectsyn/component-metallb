@@ -30,15 +30,18 @@ local configmap = kube.ConfigMap(params.configmap_name) {
     namespace: params.namespace,
   },
   data: {
-    config: std.manifestYamlDoc(if params.config == null then {
-      "address-pools": [
-        {
-          "name": "default",
-          "protocol": "layer2",
-          "addresses": params.addresses,
-        },
-      ],
-    } else params.config),
+    config:
+      if std.objectHas(params, 'addresses') then std.manifestYamlDoc({
+        "address-pools": [
+          {
+            "name": "default",
+            "protocol": "layer2",
+            "addresses": params.addresses,
+          },
+        ],
+      })
+      else if std.objectHas(params, 'config') then std.manifestYamlDoc(params.config)
+      else error "The addresses array must contain at least one virtual IP or an override config must be configured!",
   },
 };
 
