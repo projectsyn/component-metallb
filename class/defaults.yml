@@ -6,4 +6,4 @@ parameters:
       secretname: metallb-memberlist
     configmap_name: metallb
     charts:
-      metallb: '3b436a5ec87ffa0772d3d18a27a90dd7c717581f' # 0.1.23
+      metallb: 0.1.23

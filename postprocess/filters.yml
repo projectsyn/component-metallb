@@ -5,4 +5,3 @@ filters:
     filterargs:
       namespace: ${metallb:namespace}
       create_namespace: "false"
-

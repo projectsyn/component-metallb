@@ -1,11 +1,11 @@
 parameters:
   kapitan:
     dependencies:
-      - type: git
-        source: git@github.com:bitnami/charts.git
-        subdir: bitnami/metallb
-        ref: ${metallb:charts:metallb}
+      - type: helm
         output_path: dependencies/metallb/helmcharts/metallb
+        source: https://charts.bitnami.com/bitnami
+        version: ${metallb:charts:metallb}
+        chart_name: metallb
     compile:
       - input_paths:
           - metallb/component/app.jsonnet

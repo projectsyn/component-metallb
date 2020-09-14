@@ -11,7 +11,7 @@ local namespace = kube.Namespace(params.namespace) {
       app: 'metallb',
       'app.kubernetes.io/name': 'metallb',
       'app.kubernetes.io/instance': 'metallb',
-    }
+    },
   },
 };
 
