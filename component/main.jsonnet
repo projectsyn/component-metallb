@@ -31,7 +31,9 @@ local configmap = kube.ConfigMap(params.configmap_name) {
   },
   data: {
     config:
-      if std.objectHas(params, 'addresses') then std.manifestYamlDoc({
+      if std.objectHas(params, 'addresses') && std.objectHas(params, 'config') then
+        error 'Invalid config: The variables addresses and config can not be used at the same time!'
+      else if std.objectHas(params, 'addresses') then std.manifestYamlDoc({
         'address-pools': [
           {
             name: 'default',
