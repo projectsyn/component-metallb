@@ -61,6 +61,8 @@ For example this allows to specify multiple address pools:
             - 10.128.2.200/32
 ```
 
+See the https://metallb.universe.tf/configuration/[MetalLB documentation] for more details.
+
 
 == `charts.metallb`
 
