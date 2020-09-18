@@ -12,6 +12,16 @@ Currently there is no support for taking over an existing installation based on 
 
 See the xref:references/parameters.adoc[parameters] reference for further details.
 
+== Prerequisites
+
+As memberlist key must be generated and stored inside the secret key management.
+
+A pregenerated key ensures that the manifests can be applied multiple times without the secret key changing.
+Otherwise, elevated fail-over rates may occur during manifest application, as the speakers can not communicate during the rollout, due to differing keys.
+
+```
+vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist secretkey="$(openssl rand -base64 128)"
+```
 
 == Layer2 Mode (default)
 
@@ -22,15 +32,6 @@ parameters:
   metallb:
     addresses:
       - 10.128.1.200/32
-```
-
-As memberlist key must be generated and stored inside the secret key management.
-
-A pregenerated key ensures that the manifests can be applied multiple times without the secret key changing.
-Otherwise, elevated fail-over rates may occur during manifest application, as the speakers can not communicate during the rollout, due to differing keys.
-
-```
-vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist secretkey="$(openssl rand -base64 128)"
 ```
 
 == BGP Mode
