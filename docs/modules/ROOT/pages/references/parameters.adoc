@@ -30,7 +30,6 @@ A list of CIDRs (for example a single IP `10.128.1.200/32` or multiple addresses
 
 IPv6 CIDRs are valid. The cluster and the network infrastucture must support it.
 
-
 == `config`
 
 [horizontal]
