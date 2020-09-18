@@ -26,11 +26,15 @@ It can be generated using the command `openssl rand -base64 128`.
 [horizontal]
 type:: list
 
-A list of CIDRs (for example a single IP `10.128.1.200/32` or multiple addresses `10.128.1.192/27`) used as transferable virtual IPs.
+A list of CIDRs MetalLB is using as a pool to assign transferable virtual IPs whenever a new service of type `LoadBalancer` is created.
+
+Valid values are a single IP `10.128.1.200/32` or multiple addresses sepcified `10.128.1.192/27` / `192.168.1.240-192.168.1.250`.
 
 IPv6 CIDRs are valid. The cluster and the network infrastucture must support it.
 
 If the parameter addresses is provided, an address pool called `default` in protocol mode `layer2` is created.
+
+See the https://metallb.universe.tf/configuration/#layer-2-configuration[MetalLB documentation] for more details.
 
 
 == `config`
