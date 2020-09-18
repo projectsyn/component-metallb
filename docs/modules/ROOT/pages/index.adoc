@@ -35,4 +35,16 @@ vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist se
 
 == BGP Mode
 
-This component currently does not allow to configure MetalLB in the BGP mode. 
+The BGP mode can be configured by providing a full config to MetalLB.
+
+```
+parameters:
+  metallb:
+    config:
+      address-pools:
+        - name: bgp-pool1
+          protocol: bgp
+          addresses:
+            - fc00::/7
+            - 10.128.1.192/27
+```
