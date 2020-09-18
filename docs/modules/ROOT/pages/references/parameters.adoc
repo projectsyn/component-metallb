@@ -17,7 +17,8 @@ default:: `syn-metallb`
 type:: string
 default:: Vault reference
 
-A binary secret key encoded base64.
+A vault reference pointing to the Vault secret containing the secret key.
+If the key isn't provided as a vault reference, the secret key must be provided in its base64 encoded form.
 It can be generated using the command `openssl rand -base64 128`.
 
 == `addresses`
