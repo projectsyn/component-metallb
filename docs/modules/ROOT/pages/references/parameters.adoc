@@ -57,7 +57,7 @@ For example this allows to specify multiple address pools:
 == `charts.metallb`
 
 [horizontal]
-type:: git reference
-default:: `3b436a5ec87ffa0772d3d18a27a90dd7c717581f`'
+type:: helm chart version
+default:: 0.1.23
 
-A git reference like a tag, commit, branch etc.
+A specific chart version. See the https://kapitan.dev/external_dependencies/#helm-type[kapitan documentation] for more information.
