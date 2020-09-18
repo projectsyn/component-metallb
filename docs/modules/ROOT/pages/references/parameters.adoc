@@ -25,7 +25,6 @@ It can be generated using the command `openssl rand -base64 128`.
 
 [horizontal]
 type:: list
-default:: null
 
 A list of IPs (for example `10.128.1.200/32`) used as transferable virtual IPs.
 
@@ -34,7 +33,6 @@ A list of IPs (for example `10.128.1.200/32`) used as transferable virtual IPs.
 
 [horizontal]
 type:: dictionary
-default:: null
 
 A custom config can be provided.
 This overrides the automatic config generation.
