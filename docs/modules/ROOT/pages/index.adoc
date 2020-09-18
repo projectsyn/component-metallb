@@ -42,6 +42,10 @@ The BGP mode can be configured by providing a full config to MetalLB.
 parameters:
   metallb:
     config:
+      peers:
+        - peer-address: 10.0.0.1
+          peer-asn: 64501
+          my-asn: 64500
       address-pools:
         - name: bgp-pool1
           protocol: bgp
@@ -49,3 +53,5 @@ parameters:
             - fc00::/7
             - 10.128.1.192/27
 ```
+
+Check the https://metallb.universe.tf/configuration/#bgp-configuration[official documentation] for more details.
