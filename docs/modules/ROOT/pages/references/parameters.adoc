@@ -51,7 +51,7 @@ For example this allows to specify multiple address pools:
           protocol: layer2
           addresses:
             - 10.128.2.200/32
-````
+```
 
 
 == `charts.metallb`
