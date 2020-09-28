@@ -1,3 +1,9 @@
 parameters:
   metallb:
     namespace: syn-metallb
+    memberlist_secretkey: ?{vaultkv:${customer:name}/${cluster:name}/metallb-memberlist/secretkey}
+    speaker:
+      secretname: metallb-memberlist
+    configmap_name: metallb
+    charts:
+      metallb: 0.1.23

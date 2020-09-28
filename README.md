@@ -1,6 +1,6 @@
-# Commodore Component: metallb
+# Commodore Component: MetalLB
 
-This is a [Commodore][commodore] Component for metallb.
+This is a [Commodore][commodore] Component for MetalLB.
 
 This repository is part of Project Syn.
 For documentation on Project Syn and this component, see https://syn.tools.

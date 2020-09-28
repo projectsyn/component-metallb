@@ -1,3 +1,57 @@
-= metallb: A Commodore component to manage metallb
+= MetalLB: A Commodore component to manage MetalLB
 
-{doctitle} is a Commodore component for Managing metallb.
+{doctitle} is a Commodore component for Managing MetalLB.
+The component is based on the https://hub.kubeapps.com/charts/bitnami/metallb[Helm Chart] of Bitnami.
+The Bitnami Helm Chart is https://github.com/metallb/metallb/issues/653[suggested] to become a template for the official Helm Chart of the project.
+
+[CAUTION]
+====
+Currently there is no support for taking over an existing installation based on the https://metallb.universe.tf/installation/[official guide]
+====
+
+
+See the xref:references/parameters.adoc[parameters] reference for further details.
+
+== Prerequisites
+
+A memberlist key must be generated and stored inside the secret key management.
+
+A pregenerated key ensures that the manifests can be applied multiple times without the secret key changing.
+Otherwise, elevated fail-over rates may occur during manifest application, as the speakers can not communicate during the rollout, due to differing keys.
+
+```
+vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist secretkey="$(openssl rand -base64 128)"
+```
+
+== Layer2 Mode (default)
+
+For a minimal configuration, a CIDR defining the VIP range is required.
+
+```
+parameters:
+  metallb:
+    addresses:
+      - 10.128.1.200/32
+```
+
+== BGP Mode
+
+The BGP mode can be configured by providing a full config to MetalLB.
+
+```
+parameters:
+  metallb:
+    config:
+      peers:
+        - peer-address: 10.0.0.1
+          peer-asn: 64501
+          my-asn: 64500
+      address-pools:
+        - name: bgp-pool1
+          protocol: bgp
+          addresses:
+            - fc00::/7
+            - 10.128.1.192/27
+```
+
+Check the https://metallb.universe.tf/configuration/#bgp-configuration[official documentation] for more details.
