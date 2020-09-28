@@ -14,7 +14,7 @@ See the xref:references/parameters.adoc[parameters] reference for further detail
 
 == Prerequisites
 
-As memberlist key must be generated and stored inside the secret key management.
+A memberlist key must be generated and stored inside the secret key management.
 
 A pregenerated key ensures that the manifests can be applied multiple times without the secret key changing.
 Otherwise, elevated fail-over rates may occur during manifest application, as the speakers can not communicate during the rollout, due to differing keys.
