@@ -1,0 +1,4 @@
+parameters:
+  metallb:
+    addresses:
+      - 198.51.100.32/26

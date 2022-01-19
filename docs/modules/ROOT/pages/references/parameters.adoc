@@ -45,7 +45,7 @@ type:: dictionary
 A custom config can be provided.
 This overrides the automatic config generation.
 
-NOTE: The passed configuration is not going to be validated by the component.
+NOTE: The component doesn't validate the provided configuration.
 
 For example this allows to specify multiple address pools:
 ```
