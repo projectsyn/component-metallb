@@ -1,0 +1,6 @@
+:global:
+  componentName: metallb
+
+docs/antora.yml:
+  name: metallb
+  title: metallb
