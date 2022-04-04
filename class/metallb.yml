@@ -27,3 +27,13 @@ parameters:
         helm_params:
           release_name: metallb
           namespace: '${metallb:namespace}'
+
+  commodore:
+    postprocess:
+      filters:
+        - path: metallb/10_metallb_helmchart/metallb/templates
+          type: builtin
+          filter: helm_namespace
+          filterargs:
+            namespace: ${metallb:namespace}
+            create_namespace: "false"

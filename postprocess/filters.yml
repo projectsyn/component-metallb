@@ -1,7 +1,0 @@
-filters:
-  - path: metallb/10_metallb_helmchart/metallb/templates
-    type: builtin
-    filter: helm_namespace
-    filterargs:
-      namespace: ${metallb:namespace}
-      create_namespace: "false"
