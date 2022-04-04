@@ -1,6 +1,7 @@
 parameters:
   metallb:
     namespace: syn-metallb
+    name: metallb
     memberlist_secretkey: ?{vaultkv:${customer:name}/${cluster:name}/metallb-memberlist/secretkey}
     speaker:
       secretname: metallb-memberlist
