@@ -10,6 +10,14 @@ type:: string
 default:: `syn-metallb`
 
 
+== `name`
+
+[horizontal]
+type:: string
+default:: `metallb`
+
+Usually there is just one deployment and therefore no change is required.
+
 
 == `speaker.secretkey`
 

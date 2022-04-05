@@ -25,7 +25,7 @@ parameters:
             secretName: ${metallb:speaker:secretname}
           existingConfigMap: ${metallb:configmap_name}
         helm_params:
-          release_name: metallb
+          name: ${metallb:name}
           namespace: '${metallb:namespace}'
 
   commodore:
