@@ -2,7 +2,7 @@ parameters:
   metallb:
     namespace: syn-metallb
     name: metallb
-    memberlist_secretkey: ?{vaultkv:${customer:name}/${cluster:name}/metallb-memberlist/secretkey}
+    memberlist_secretkey: ?{vaultkv:${cluster:tenant}/${cluster:name}/metallb-memberlist/secretkey}
     speaker:
       secretname: metallb-memberlist
     configmap_name: metallb
