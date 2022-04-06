@@ -76,6 +76,6 @@ See the https://metallb.universe.tf/configuration/[MetalLB documentation] for mo
 
 [horizontal]
 type:: helm chart version
-default:: 0.1.23
+default:: 1.1.0
 
 A specific chart version. See the https://kapitan.dev/external_dependencies/#helm-type[kapitan documentation] for more information.
