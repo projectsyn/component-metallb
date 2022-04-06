@@ -1,5 +1,6 @@
 :global:
   componentName: metallb
+  feature_goldenTests: true
 
 docs/antora.yml:
   name: metallb
