@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-0.1.23
+    helm.sh/chart: metallb-1.1.0
   name: metallb-controller
 spec:
   revisionHistoryLimit: 3
@@ -22,13 +22,13 @@ spec:
         app.kubernetes.io/instance: metallb
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: metallb
-        helm.sh/chart: metallb-0.1.23
+        helm.sh/chart: metallb-1.1.0
     spec:
       containers:
         - args:
             - --port=7472
             - --config=metallb
-          image: docker.io/bitnami/metallb-controller:0.9.3-debian-10-r141
+          image: docker.io/bitnami/metallb-controller:0.9.5-debian-10-r32
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
