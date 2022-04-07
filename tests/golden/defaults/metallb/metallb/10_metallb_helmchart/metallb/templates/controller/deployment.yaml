@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    helm.sh/chart: metallb-2.6.12
   name: metallb-controller
 spec:
   revisionHistoryLimit: 3
@@ -22,13 +22,28 @@ spec:
         app.kubernetes.io/instance: metallb
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: metallb
-        helm.sh/chart: metallb-1.1.0
+        helm.sh/chart: metallb-2.6.12
     spec:
+      affinity:
+        nodeAffinity: null
+        podAffinity: null
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/component: controller
+                    app.kubernetes.io/instance: metallb
+                    app.kubernetes.io/name: metallb
+                namespaces:
+                  - syn-metallb
+                topologyKey: kubernetes.io/hostname
+              weight: 1
       containers:
         - args:
             - --port=7472
             - --config=metallb
-          image: docker.io/bitnami/metallb-controller:0.9.5-debian-10-r32
+          image: docker.io/bitnami/metallb-controller:0.12.1-debian-10-r46
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -52,6 +67,9 @@ spec:
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
+          resources:
+            limits: {}
+            requests: {}
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:

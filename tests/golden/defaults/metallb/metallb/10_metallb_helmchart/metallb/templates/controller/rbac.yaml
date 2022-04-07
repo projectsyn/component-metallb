@@ -1,37 +1,60 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   labels:
+    app.kubernetes.io/component: controller
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
     helm.sh/chart: metallb-2.6.12
-  name: metallb-config-watcher
+  name: metallb-controller
 rules:
   - apiGroups:
       - ''
     resources:
-      - configmaps
+      - services
     verbs:
       - get
       - list
       - watch
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - services/status
+    verbs:
+      - update
+  - apiGroups:
+      - ''
+    resources:
+      - events
+    verbs:
+      - create
+      - patch
+  - apiGroups:
+      - policy
+    resourceNames:
+      - metallb-controller
+    resources:
+      - podsecuritypolicies
+    verbs:
+      - use
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   labels:
+    app.kubernetes.io/component: controller
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
     helm.sh/chart: metallb-2.6.12
-  name: metallb-config-watcher
+  name: metallb-controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: metallb-config-watcher
+  kind: ClusterRole
+  name: metallb-controller
 subjects:
   - kind: ServiceAccount
     name: metallb-controller
-  - kind: ServiceAccount
-    name: metallb-speaker
+    namespace: syn-metallb
