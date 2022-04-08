@@ -5,8 +5,9 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
-  name: metallb-controller
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb:controller
 rules:
   - apiGroups:
       - ''
@@ -16,7 +17,6 @@ rules:
       - get
       - list
       - watch
-      - update
   - apiGroups:
       - ''
     resources:
@@ -46,8 +46,9 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
-  name: metallb-speaker
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb:speaker
 rules:
   - apiGroups:
       - ''
@@ -55,6 +56,14 @@ rules:
       - services
       - endpoints
       - nodes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
     verbs:
       - get
       - list
@@ -82,12 +91,13 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
-  name: metallb-controller
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb:controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: metallb-controller
+  name: metallb:controller
 subjects:
   - kind: ServiceAccount
     name: metallb-controller
@@ -100,12 +110,13 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
-  name: metallb-speaker
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb:speaker
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: metallb-speaker
+  name: metallb:speaker
 subjects:
   - kind: ServiceAccount
     name: metallb-speaker
@@ -118,7 +129,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-config-watcher
 rules:
   - apiGroups:
@@ -137,7 +149,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-pod-lister
 rules:
   - apiGroups:
@@ -148,13 +161,48 @@ rules:
       - list
 ---
 apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: metallb
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb-controller
+rules:
+  - apiGroups:
+      - ''
+    resources:
+      - secrets
+    verbs:
+      - create
+  - apiGroups:
+      - ''
+    resourceNames:
+      - metallb-memberlist
+    resources:
+      - secrets
+    verbs:
+      - list
+  - apiGroups:
+      - apps
+    resourceNames:
+      - metallb-controller
+    resources:
+      - deployments
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-config-watcher
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -173,7 +221,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-pod-lister
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -182,3 +231,21 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: metallb-speaker
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: metallb
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: metallb
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
+  name: metallb-controller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: metallb-controller
+subjects:
+  - kind: ServiceAccount
+    name: metallb-controller

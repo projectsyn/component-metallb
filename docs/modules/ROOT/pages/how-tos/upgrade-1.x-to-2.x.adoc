@@ -1,0 +1,15 @@
+= Upgrade from 1.x to 2.x
+
+This guide describes the steps to perform an upgrade of the component from version 1.x to 2.x.
+
+== Introduction
+
+Beginning with version 2.0.0, this component is no longer based on the Bitnami Helm chart, but on the official Helm chart for MetalLB.
+
+The upgrade can be done in-place.
+
+You should notice that the Docker image changes from docker.io to quay.io.
+
+We're doing this because we want to be als close to upstream as possible.
+
+Please also keep in mind that we upgraded the version of MetalLB from v0.9.5 to v0.12.1. You can find the full changelog https://metallb.universe.tf/release-notes/[here].

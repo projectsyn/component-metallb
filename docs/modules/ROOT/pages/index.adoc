@@ -1,8 +1,7 @@
 = MetalLB: A Commodore component to manage MetalLB
 
-{doctitle} is a Commodore component for Managing MetalLB.
-The component is based on the https://hub.kubeapps.com/charts/bitnami/metallb[Helm Chart] of Bitnami.
-The Bitnami Helm Chart is https://github.com/metallb/metallb/issues/653[suggested] to become a template for the official Helm Chart of the project.
+{doctitle} is a Commodore component for managing MetalLB.
+The component is based on the official https://artifacthub.io/packages/helm/metallb/metallb[Helm Chart].
 
 [CAUTION]
 ====
@@ -16,7 +15,7 @@ See the xref:references/parameters.adoc[parameters] reference for further detail
 
 A memberlist key must be generated and stored inside the secret key management.
 
-A pregenerated key ensures that the manifests can be applied multiple times without the secret key changing.
+A pre-generated key ensures that the manifests can be applied multiple times without the secret key changing.
 Otherwise, elevated fail-over rates may occur during manifest application, as the speakers can not communicate during the rollout, due to differing keys.
 
 ```
