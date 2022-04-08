@@ -6,7 +6,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-speaker
 spec:
   selector:
@@ -19,14 +20,13 @@ spec:
       labels:
         app.kubernetes.io/component: speaker
         app.kubernetes.io/instance: metallb
-        app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/name: metallb
-        helm.sh/chart: metallb-1.1.0
     spec:
       containers:
         - args:
             - --port=7472
             - --config=metallb
+            - --log-level=info
           env:
             - name: METALLB_NODE_NAME
               valueFrom:
@@ -42,36 +42,38 @@ spec:
                   fieldPath: status.podIP
             - name: METALLB_ML_LABELS
               value: app.kubernetes.io/name=metallb,app.kubernetes.io/component=speaker
-            - name: METALLB_ML_NAMESPACE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.namespace
+            - name: METALLB_ML_BIND_PORT
+              value: '7946'
             - name: METALLB_ML_SECRET_KEY
               valueFrom:
                 secretKeyRef:
                   key: secretkey
                   name: metallb-memberlist
-          envFrom: null
-          image: docker.io/bitnami/metallb-speaker:0.9.5-debian-10-r31
-          imagePullPolicy: IfNotPresent
+          image: quay.io/metallb/speaker:v0.12.1
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: /metrics
-              port: metrics
+              port: monitoring
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
-          name: metallb-speaker
+          name: speaker
           ports:
             - containerPort: 7472
-              name: metrics
+              name: monitoring
+            - containerPort: 7946
+              name: memberlist-tcp
+              protocol: TCP
+            - containerPort: 7946
+              name: memberlist-udp
+              protocol: UDP
           readinessProbe:
             failureThreshold: 3
             httpGet:
               path: /metrics
-              port: metrics
+              port: monitoring
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1
@@ -80,18 +82,16 @@ spec:
             allowPrivilegeEscalation: false
             capabilities:
               add:
-                - NET_ADMIN
                 - NET_RAW
-                - SYS_ADMIN
               drop:
                 - ALL
             readOnlyRootFilesystem: true
-            runAsUser: 0
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
       serviceAccountName: metallb-speaker
-      terminationGracePeriodSeconds: 2
+      terminationGracePeriodSeconds: 0
       tolerations:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
+          operator: Exists

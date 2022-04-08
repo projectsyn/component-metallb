@@ -5,7 +5,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-controller
 spec:
   allowPrivilegeEscalation: false
@@ -15,8 +16,8 @@ spec:
   defaultAllowPrivilegeEscalation: false
   fsGroup:
     ranges:
-      - max: 1001
-        min: 1001
+      - max: 65535
+        min: 1
     rule: MustRunAs
   hostIPC: false
   hostNetwork: false
@@ -26,16 +27,13 @@ spec:
   requiredDropCapabilities:
     - ALL
   runAsUser:
-    ranges:
-      - max: 1001
-        min: 1001
-    rule: MustRunAs
+    rule: MustRunAsNonRoot
   seLinux:
     rule: RunAsAny
   supplementalGroups:
     ranges:
-      - max: 1001
-        min: 1001
+      - max: 65535
+        min: 1
     rule: MustRunAs
   volumes:
     - configMap
@@ -49,19 +47,15 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    helm.sh/chart: metallb-1.1.0
+    app.kubernetes.io/version: v0.12.1
+    helm.sh/chart: metallb-0.12.1
   name: metallb-speaker
 spec:
   allowPrivilegeEscalation: false
   allowedCapabilities:
-    - NET_ADMIN
     - NET_RAW
-    - SYS_ADMIN
   allowedHostPaths: []
-  defaultAddCapabilities:
-    - NET_ADMIN
-    - NET_RAW
-    - SYS_ADMIN
+  defaultAddCapabilities: []
   defaultAllowPrivilegeEscalation: false
   fsGroup:
     rule: RunAsAny
@@ -71,6 +65,8 @@ spec:
   hostPorts:
     - max: 7472
       min: 7472
+    - max: 7946
+      min: 7946
   privileged: true
   readOnlyRootFilesystem: true
   requiredDropCapabilities:
