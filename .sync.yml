@@ -3,7 +3,3 @@
   githubUrl: https://github.com/projectsyn/component-metallb
   feature_goUnitTests: false
   feature_goldenTests: true
-
-docs/antora.yml:
-  name: metallb
-  title: metallb
