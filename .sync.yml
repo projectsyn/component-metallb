@@ -1,5 +1,5 @@
 :global:
-  componentName: metallb
+  componentName: MetalLB
   githubUrl: https://github.com/projectsyn/component-metallb
   feature_goUnitTests: false
   feature_goldenTests: true
