@@ -5,7 +5,7 @@ on:
       - master
 
 env:
-  COMPONENT_NAME: metallb
+  COMPONENT_NAME: MetalLB
 
 jobs:
   linting:
