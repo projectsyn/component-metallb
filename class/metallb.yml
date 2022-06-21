@@ -3,8 +3,8 @@ parameters:
     dependencies:
       - type: helm
         output_path: dependencies/metallb/helmcharts/metallb-${metallb:charts:metallb}
-        source: https://metallb.github.io/metallb
-        version: ${metallb:charts:metallb}
+        source: ${metallb:charts:metallb:source}
+        version: ${metallb:charts:metallb:version}
         chart_name: metallb
     compile:
       - input_paths:

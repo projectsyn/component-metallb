@@ -72,10 +72,10 @@ For example this allows to specify multiple address pools:
 See the https://metallb.universe.tf/configuration/[MetalLB documentation] for more details.
 
 
-== `charts.metallb`
+== `charts.metallb.version`
 
 [horizontal]
-type:: helm chart version
-default:: 1.1.0
+type:: string
+default:: See https://github.com/projectsyn/component-metallb/blob/master/class/defaults.yml[class/defaults.yml]
 
-A specific chart version. See the https://kapitan.dev/external_dependencies/#helm-type[kapitan documentation] for more information.
+The version of the `metallb` chart that's used.
