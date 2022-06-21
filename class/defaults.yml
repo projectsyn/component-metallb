@@ -7,4 +7,6 @@ parameters:
       secretname: metallb-memberlist
     configmap_name: metallb
     charts:
-      metallb: 0.12.1
+      metallb:
+        source: https://metallb.github.io/metallb
+        version: 0.12.1
