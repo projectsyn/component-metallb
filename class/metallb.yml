@@ -2,7 +2,7 @@ parameters:
   kapitan:
     dependencies:
       - type: helm
-        output_path: dependencies/metallb/helmcharts/metallb
+        output_path: dependencies/metallb/helmcharts/metallb-${metallb:charts:metallb}
         source: https://metallb.github.io/metallb
         version: ${metallb:charts:metallb}
         chart_name: metallb
@@ -19,7 +19,7 @@ parameters:
         input_type: helm
         output_type: yaml
         input_paths:
-          - metallb/helmcharts/metallb
+          - metallb/helmcharts/metallb-${metallb:charts:metallb}
         helm_values:
           speaker:
             secretName: ${metallb:speaker:secretname}
