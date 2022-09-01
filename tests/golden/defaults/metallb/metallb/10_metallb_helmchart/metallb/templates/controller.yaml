@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.12.1
-    helm.sh/chart: metallb-0.12.1
+    app.kubernetes.io/version: v0.13.5
+    helm.sh/chart: metallb-0.13.5
   name: metallb-controller
 spec:
   selector:
@@ -15,6 +15,8 @@ spec:
       app.kubernetes.io/component: controller
       app.kubernetes.io/instance: metallb
       app.kubernetes.io/name: metallb
+  strategy:
+    type: RollingUpdate
   template:
     metadata:
       labels:
@@ -25,14 +27,14 @@ spec:
       containers:
         - args:
             - --port=7472
-            - --config=metallb
             - --log-level=info
+            - --cert-service-name=metallb-webhook-service
           env:
             - name: METALLB_ML_SECRET_NAME
               value: metallb-memberlist
             - name: METALLB_DEPLOYMENT
               value: metallb-controller
-          image: quay.io/metallb/controller:v0.12.1
+          image: quay.io/metallb/controller:v0.13.5
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -46,6 +48,9 @@ spec:
           ports:
             - containerPort: 7472
               name: monitoring
+            - containerPort: 9443
+              name: webhook-server
+              protocol: TCP
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -61,6 +66,10 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /tmp/k8s-webhook-server/serving-certs
+              name: cert
+              readOnly: true
       nodeSelector:
         kubernetes.io/os: linux
       securityContext:
@@ -69,3 +78,8 @@ spec:
         runAsUser: 65534
       serviceAccountName: metallb-controller
       terminationGracePeriodSeconds: 0
+      volumes:
+        - name: cert
+          secret:
+            defaultMode: 420
+            secretName: webhook-server-cert

@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.12.1
-    helm.sh/chart: metallb-0.12.1
+    app.kubernetes.io/version: v0.13.5
+    helm.sh/chart: metallb-0.13.5
   name: metallb-speaker
 spec:
   selector:
@@ -25,7 +25,6 @@ spec:
       containers:
         - args:
             - --port=7472
-            - --config=metallb
             - --log-level=info
           env:
             - name: METALLB_NODE_NAME
@@ -49,7 +48,7 @@ spec:
                 secretKeyRef:
                   key: secretkey
                   name: metallb-memberlist
-          image: quay.io/metallb/speaker:v0.12.1
+          image: quay.io/metallb/speaker:v0.13.5
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -95,3 +94,9 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
           operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+      volumes: null
+  updateStrategy:
+    type: RollingUpdate
