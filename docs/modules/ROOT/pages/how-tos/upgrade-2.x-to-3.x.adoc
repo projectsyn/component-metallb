@@ -1,0 +1,30 @@
+= Upgrade from 2.x to 3.x
+
+This guide describes the steps to perform an upgrade of the component from version 2.x to 3.x.
+
+== Introduction
+
+Beginning with version 3.0.0, this component is using the commodore best practices for Helm charts.
+
+This means that the value to manually override the Helm chart version has changed from `parameters.metallb.charts.metallb` to `parameters.metallb.charts.metallb.version`.
+
+Therefore, the following configuration
+
+```
+parameters:
+  metallb:
+    charts:
+      metallb: x.y.z
+```
+
+must be changed to
+
+```
+parameters:
+  metallb:
+    charts:
+      metallb:
+        version: x.y.z
+```
+
+in order to override the Helm chart version.
