@@ -24,3 +24,9 @@ parameters:
         helm_params:
           name: ${metallb:name}
           namespace: "${metallb:namespace}"
+  commodore:
+    postprocess:
+      filters:
+        - type: jsonnet
+          filter: postprocess/remove-null-objs.jsonnet
+          path: metallb/10_metallb_helmchart/metallb/charts/crds/templates
