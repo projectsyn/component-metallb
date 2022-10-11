@@ -10,3 +10,7 @@ parameters:
       metallb:
         source: https://metallb.github.io/metallb
         version: 0.12.1
+    helm_values:
+      speaker:
+        secretName: ${metallb:speaker:secretname}
+      existingConfigMap: ${metallb:configmap_name}
