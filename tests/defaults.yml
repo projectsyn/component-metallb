@@ -1,8 +1,12 @@
 parameters:
   metallb:
-    config:
-      address-pools:
-        - name: default
+    ipAddressPools:
+      default:
+        spec:
           addresses:
-             - 198.51.100.32/26
-          protocol: layer2
+            - 198.51.100.32/26
+    l2Advertisements:
+      default:
+        spec:
+          ipAddressPools:
+            - default

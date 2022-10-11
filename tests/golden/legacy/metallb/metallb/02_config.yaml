@@ -1,0 +1,232 @@
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BGP peer is generated from the legacy config
+      parameter
+  labels:
+    name: peer1
+  name: peer1
+  namespace: syn-metallb
+spec:
+  bfdProfile: full1
+  myASN: 64500
+  peerASN: 64501
+  peerAddress: 192.0.2.1
+---
+apiVersion: metallb.io/v1beta2
+kind: BGPPeer
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BGP peer is generated from the legacy config
+      parameter
+  labels:
+    name: peer2
+  name: peer2
+  namespace: syn-metallb
+spec:
+  myASN: 64500
+  nodeSelectors:
+    - matchExpressions:
+        - key: network-speed
+          operator: NotIn
+          values:
+            - slow
+      matchLabels:
+        rack: frontend
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - hostA
+            - hostB
+  peerASN: 64501
+  peerAddress: 192.0.2.2
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: default
+  name: default
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.32/27
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: bgp-minimal
+  name: bgp-minimal
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.0/27
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: bgp
+  name: bgp
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.64/27
+  autoAssign: false
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: bgp2
+  name: bgp2
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.96/27
+  autoAssign: false
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp-minimal-default
+  name: bgp-minimal-default
+  namespace: syn-metallb
+spec:
+  ipAddressPools:
+    - bgp-minimal
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp-1
+  name: bgp-1
+  namespace: syn-metallb
+spec:
+  aggregationLength: 32
+  communities:
+    - 64512:1234
+  ipAddressPools:
+    - bgp
+  localPref: 100
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp-2
+  name: bgp-2
+  namespace: syn-metallb
+spec:
+  aggregationLength: 27
+  communities:
+    - 64512:1234
+  ipAddressPools:
+    - bgp
+  localPref: 50
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp2-1
+  name: bgp2-1
+  namespace: syn-metallb
+spec:
+  aggregationLength: 32
+  communities:
+    - no-advertise
+  ipAddressPools:
+    - bgp2
+  localPref: 100
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp2-2
+  name: bgp2-2
+  namespace: syn-metallb
+spec:
+  aggregationLength: 27
+  ipAddressPools:
+    - bgp2
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This L2Advertisement is generated if any L2 address
+      pools are configured through the legacy configuration parameters
+  labels:
+    name: legacy
+  name: legacy
+  namespace: syn-metallb
+spec:
+  ipAddressPools:
+    - default
+---
+apiVersion: metallb.io/v1beta1
+kind: BFDProfile
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BFD profile is generated from the legacy config
+      parameter
+  labels:
+    name: full1
+  name: full1
+  namespace: syn-metallb
+spec:
+  echoInterval: 62
+  echoMode: false
+  minimumTtl: 254
+  passiveMode: false
+  receiveInterval: 179
+  transmitInterval: 180
+---
+apiVersion: metallb.io/v1beta1
+kind: Community
+metadata:
+  annotations:
+    metallb.syn.tools/description: This object is generated from the legacy config
+      parameter
+  labels:
+    name: legacy
+  name: legacy
+  namespace: syn-metallb
+spec:
+  communities:
+    - name: no-advertise
+      value: 65535:65282

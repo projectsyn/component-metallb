@@ -7,7 +7,7 @@
       "name": "MetalLB",
       "slug": "metallb",
       "parameter_key": "metallb",
-      "test_cases": "defaults addresses",
+      "test_cases": "defaults addresses legacy",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",
