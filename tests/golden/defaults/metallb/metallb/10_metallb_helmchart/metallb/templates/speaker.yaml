@@ -6,8 +6,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.12.1
-    helm.sh/chart: metallb-0.12.1
+    app.kubernetes.io/version: v0.13.9
+    helm.sh/chart: metallb-0.13.9
   name: metallb-speaker
 spec:
   selector:
@@ -25,7 +25,6 @@ spec:
       containers:
         - args:
             - --port=7472
-            - --config=metallb
             - --log-level=info
           env:
             - name: METALLB_NODE_NAME
@@ -44,12 +43,9 @@ spec:
               value: app.kubernetes.io/name=metallb,app.kubernetes.io/component=speaker
             - name: METALLB_ML_BIND_PORT
               value: '7946'
-            - name: METALLB_ML_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  key: secretkey
-                  name: metallb-memberlist
-          image: quay.io/metallb/speaker:v0.12.1
+            - name: METALLB_ML_SECRET_KEY_PATH
+              value: /etc/ml_secret_key
+          image: quay.io/metallb/speaker:v0.13.9
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -86,6 +82,9 @@ spec:
               drop:
                 - ALL
             readOnlyRootFilesystem: true
+          volumeMounts:
+            - mountPath: /etc/ml_secret_key
+              name: memberlist
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux
@@ -95,3 +94,13 @@ spec:
         - effect: NoSchedule
           key: node-role.kubernetes.io/master
           operator: Exists
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+      volumes:
+        - name: memberlist
+          secret:
+            defaultMode: 420
+            secretName: metallb-memberlist
+  updateStrategy:
+    type: RollingUpdate
