@@ -79,3 +79,11 @@ type:: string
 default:: See https://github.com/projectsyn/component-metallb/blob/master/class/defaults.yml[class/defaults.yml]
 
 The version of the `metallb` chart that's used.
+
+== `helm_values`
+
+[horizontal]
+default:: See https://github.com/projectsyn/component-metallb/blob/master/class/defaults.yml[class/defaults.yml]
+
+The Helm values to use when rendering the MetalLB Helm chart.
+See the chart's https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml[`values.yaml`] for supported fields.

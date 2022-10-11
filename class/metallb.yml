@@ -20,10 +20,7 @@ parameters:
         output_type: yaml
         input_paths:
           - metallb/helmcharts/metallb-${metallb:charts:metallb:version}
-        helm_values:
-          speaker:
-            secretName: ${metallb:speaker:secretname}
-          existingConfigMap: ${metallb:configmap_name}
+        helm_values: ${metallb:helm_values}
         helm_params:
           name: ${metallb:name}
           namespace: "${metallb:namespace}"
