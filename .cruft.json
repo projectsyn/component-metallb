@@ -1,17 +1,17 @@
 {
   "template": "https://github.com/projectsyn/commodore-component-template.git",
-  "commit": "5b2799d8242f1c59beaa9502599ca88f9e006db4",
+  "commit": "73f964d1a9b834a772169d1ffe2b4406f90b2472",
   "checkout": "main",
   "context": {
     "cookiecutter": {
       "name": "MetalLB",
       "slug": "metallb",
       "parameter_key": "metallb",
-      "test_cases": "defaults",
+      "test_cases": "defaults addresses",
       "add_lib": "n",
       "add_pp": "n",
       "add_golden": "y",
-      "add_matrix": "n",
+      "add_matrix": "y",
       "add_go_unit": "n",
       "copyright_holder": "VSHN AG <info@vshn.ch>",
       "copyright_year": "2021",

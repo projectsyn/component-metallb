@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  config: |-
+    "address-pools":
+    - "addresses":
+      - "198.51.100.32/26"
+      "name": "default"
+      "protocol": "layer2"
+kind: ConfigMap
+metadata:
+  annotations: {}
+  labels:
+    name: metallb
+  name: metallb
+  namespace: syn-metallb

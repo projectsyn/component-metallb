@@ -1,4 +1,8 @@
 parameters:
   metallb:
-    addresses:
-      - 198.51.100.32/26
+    config:
+      address-pools:
+        - name: default
+          addresses:
+             - 198.51.100.32/26
+          protocol: layer2
