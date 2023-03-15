@@ -5,6 +5,29 @@ local inv = kap.inventory();
 // The hiera parameters for the component
 local params = inv.parameters.metallb;
 
+local metallbVersion =
+  local ver = params.charts.metallb.version;
+  local verparts = std.split(ver, '.');
+  local parseOrWarn(val, typ) =
+    local parsed = std.parseJson(val);
+    if std.isNumber(parsed) then
+      parsed
+    else
+      std.trace(
+        'Failed to parse %s version "%s" as number, returning 0' % [ typ, val ],
+        0
+      );
+  {
+    major: parseOrWarn(verparts[0], 'major'),
+    minor: parseOrWarn(verparts[1], 'minor'),
+  };
+
+
+assert
+  metallbVersion.major >= 1 || (metallbVersion.major == 0 && metallbVersion.minor >= 13) :
+  'Component metallb %s only supports MetalLB 0.13 and newer' %
+  [ inv.parameters.components.metallb.version ];
+
 local namespace = kube.Namespace(params.namespace) {
   metadata+: {
     labels+: {
