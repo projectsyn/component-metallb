@@ -40,7 +40,7 @@ Valid values are a single IP `10.128.1.200/32` or multiple addresses sepcified `
 
 When the cluster and the network infrastucture supports it, IPv6 CIDRs can be configured as well.
 
-If the parameter addresses is provided, an address pool called `default` in protocol mode `layer2` is created.
+If the parameter addresses is provided, the component creates an `IPAddressPool` and `L2Advertisement` called `default` to advertise the provided CIDRs in layer 2 mode.
 
 See the https://metallb.universe.tf/configuration/#layer-2-configuration[MetalLB documentation] for more details.
 
@@ -49,6 +49,14 @@ See the https://metallb.universe.tf/configuration/#layer-2-configuration[MetalLB
 
 [horizontal]
 type:: dictionary
+
+[IMPORTANT]
+====
+This parameter is deprecated.
+Config provided in this parameter should be migrated to the new component parameters which are mapped to custom resources, see below.
+
+See the xref:how-tos/upgrade-3.x-to-4.x.adoc[migration how-to] for details.
+====
 
 A custom config can be provided.
 This overrides the automatic config generation.
@@ -71,6 +79,95 @@ For example this allows to specify multiple address pools:
 
 See the https://metallb.universe.tf/configuration/[MetalLB documentation] for more details.
 
+== `ipAddressPools`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `IPAddressPool` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
+
+[NOTE]
+====
+When you use parameter `addresses`, you can further customize the `IPAddressPool` named `default` through this parameter.
+If you specify additional CIDRs through this parameter, the list provided here is merged with the list provided in `addresses`, filtering out duplicate entries.
+====
+
+== `l2Advertisements`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `L2Advertisement` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
+
+[NOTE]
+====
+When you use parameter `addresses`, you can further customize the `L2Advertisement` named `default` through this parameter.
+If you specify additional address pool names through this parameter, the component ensures that there's no duplicate entry for pool name `default`.
+====
+
+== `bgpPeers`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `BGPPeer` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
+
+== `bgpAdvertisements`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `BGPAdvertisement` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
+
+== `communities`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `Community` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
+
+== `bfdProfiles`
+
+[horizontal]
+type:: dictionary
+default:: `{}`
+
+Each key-value pair in this parameter is transformed into a `BFDProfile` custom resource.
+The key is used as `metadata.name` of the resulting resource.
+The value is merged into the resource as provided.
+One implication of this is that you need to provide a valid partial custom resource definition.
+For example, you must put configurations into field `spec` in the provided value.
+The component doesn't validate the provided values.
 
 == `charts.metallb.version`
 

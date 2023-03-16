@@ -24,7 +24,7 @@ vault kv put -cas=0 clusters/kv/${TENANT_ID}/${CLUSTER_ID}/metallb-memberlist se
 
 == Layer2 Mode (default)
 
-For a minimal configuration, a CIDR defining the VIP range is required.
+For a minimal configuration, only a CIDR defining the VIP range is required.
 
 ```
 parameters:
@@ -35,22 +35,29 @@ parameters:
 
 == BGP Mode
 
-The BGP mode can be configured by providing a full config to MetalLB.
+The BGP mode can be configured by providing appropriate config:
 
 ```
 parameters:
   metallb:
-    config:
-      peers:
-        - peer-address: 10.0.0.1
-          peer-asn: 64501
-          my-asn: 64500
-      address-pools:
-        - name: bgp-pool1
-          protocol: bgp
+    bgpPeers:
+      my-peer:
+        spec:
+          peerAddress: 10.0.0.1
+          peerASN: 64501
+          myASN: 64500
+    ipAddressPools:
+      bgp-pool1:
+        spec:
           addresses:
             - fc00::/7
             - 10.128.1.192/27
+    bgpAdvertisements:
+      bgp-pool1:
+        spec:
+          ipAddressPools:
+            - bgp-pool1
+
 ```
 
 Check the https://metallb.universe.tf/configuration/#bgp-configuration[official documentation] for more details.

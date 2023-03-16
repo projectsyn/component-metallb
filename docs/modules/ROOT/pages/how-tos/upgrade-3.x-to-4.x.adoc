@@ -1,0 +1,419 @@
+= Upgrade from component version 3.x to 4.x
+
+This guide describes the steps to peform an upgrade of the component from version 3.x to 4.x.
+
+== Introduction
+
+Beginning with version 4.0.0, the component only supports MetalLB >= 0.13, and always renders configuration as MetalLB custom resources.
+
+If you explicitly set the MetalLB helm chart version to < 0.13, the component will fail to compile.
+
+If you use parameter `addresses` to configure MetalLB, you don't have to migrate your config.
+However, if you use parameter `config` to configure MetalLb, you should update your configuration to use the new custom resource config parameters directly.
+
+== Migrate config to custom resource parameters
+
+After upgrading to component version 4.x, the component will translate configurations provided in parameter `config` into custom resources transparently.
+However, the `config` parameter will be removed in a future version, so we strongly recommend migrating the configuration to the new `ipAddressPools`, `l2Advertisements`, `bgpPeers`, `bgpAdvertisements`, `communities` and `bfdProfiles` parameters.
+
+You can extract the values for the new parameters from the cluster catalog after compiling component version 4.x for the first time.
+The config is put into the catalog in file `catalog/manifests/metallb/02_config.yaml`.
+
+== Example migration
+
+This section provides an example of how a reasonably complex configuration can be mapped to the new parameters.
+Generally speaking, the config format remains mostly the same, except that the advertisement configurations got moved out of the address pool configuration into their own dedicated custom resources.
+Additionally, the address pool custom resource doesn't have a field `protocol`.
+That information is now modeled by referring to the address pool from either an `L2Advertisement` or `BGPAdvertisement` resource.
+
+.old `class/defaults.yml`
+[%collapsible]
+====
+[source,yaml]
+----
+parameters
+  metallb:
+    config:
+      peers:
+        - peer-address: 192.0.2.1
+          peer-asn: 64501
+          my-asn: 64500
+          bfd-profile: full1
+        - peer-address: 192.0.2.2
+          peer-asn: 64501
+          my-asn: 64500
+          node-selectors:
+            - match-labels:
+                rack: frontend
+              match-expressions:
+                - key: network-speed
+                  operator: NotIn
+                  values: [slow]
+            - match-expressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values: [hostA, hostB]
+      address-pools:
+        - name: default
+          addresses:
+            - 198.51.100.32/27
+          protocol: layer2
+        - name: bgp
+          addresses:
+            - 198.51.100.64/27
+          protocol: bgp
+          auto-assign: false
+          bgp-advertisements:
+            - aggregation-length: 32
+              localpref: 100
+              communities:
+                - 64512:1234
+            - aggregation-length: 27
+              localpref: 50
+              communities:
+                - 64512:1234
+        - name: bgp2
+          addresses:
+            - 198.51.100.96/27
+          protocol: bgp
+          auto-assign: false
+          bgp-advertisements:
+            - aggregation-length: 32
+              localpref: 100
+              communities:
+                - no-advertise
+            - aggregation-length: 27
+      bgp-communities:
+        no-advertise: 65535:65282
+      bfd-profiles:
+        - name: full1
+          receive-interval: 179
+          transmit-interval: 180
+          echo-interval: 62
+          echo-mode: false
+          passive-mode: false
+          minimum-ttl: 254
+----
+====
+
+.generated custom resource-based config
+[%collapsible]
+====
+[source,yaml]
+----
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BGP peer is generated from the legacy config
+      parameter
+  labels:
+    name: peer1
+  name: peer1
+  namespace: syn-metallb
+spec:
+  bfdProfile: full1
+  myASN: 64500
+  peerASN: 64501
+  peerAddress: 192.0.2.1
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPPeer
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BGP peer is generated from the legacy config
+      parameter
+  labels:
+    name: peer2
+  name: peer2
+  namespace: syn-metallb
+spec:
+  myASN: 64500
+  nodeSelectors:
+    - matchExpressions:
+        - key: network-speed
+          operator: NotIn
+          values:
+            - slow
+      matchLabels:
+        rack: frontend
+    - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+            - hostA
+            - hostB
+  peerASN: 64501
+  peerAddress: 192.0.2.2
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: default
+  name: default
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.32/27
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: bgp
+  name: bgp
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.64/27
+  autoAssign: false
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  annotations:
+    metallb.syn.tools/description: This IP address pool is generated from the legacy
+      parameter "config"
+  labels:
+    name: bgp2
+  name: bgp2
+  namespace: syn-metallb
+spec:
+  addresses:
+    - 198.51.100.96/27
+  autoAssign: false
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp-1
+  name: bgp-1
+  namespace: syn-metallb
+spec:
+  aggregationLength: 32
+  communities:
+    - 64512:1234
+  ipAddressPools:
+    - bgp
+  localPref: 100
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp-2
+  name: bgp-2
+  namespace: syn-metallb
+spec:
+  aggregationLength: 27
+  communities:
+    - 64512:1234
+  ipAddressPools:
+    - bgp
+  localPref: 50
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp2-1
+  name: bgp2-1
+  namespace: syn-metallb
+spec:
+  aggregationLength: 32
+  communities:
+    - no-advertise
+  ipAddressPools:
+    - bgp2
+  localPref: 100
+---
+apiVersion: metallb.io/v1beta1
+kind: BGPAdvertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This advertisements is generated from legacy address
+      pool config
+  labels:
+    name: bgp2-2
+  name: bgp2-2
+  namespace: syn-metallb
+spec:
+  aggregationLength: 27
+  ipAddressPools:
+    - bgp2
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  annotations:
+    metallb.syn.tools/description: This L2Advertisement is generated if any L2 address
+      pools are configured through the legacy configuration parameters
+  labels:
+    name: legacy
+  name: legacy
+  namespace: syn-metallb
+spec:
+  ipAddressPools:
+    - default
+---
+apiVersion: metallb.io/v1beta1
+kind: BFDProfile
+metadata:
+  annotations:
+    metallb.syn.tools/description: This BFD profile is generated from the legacy config
+      parameter
+  labels:
+    name: full1
+  name: full1
+  namespace: syn-metallb
+spec:
+  echoInterval: 62
+  echoMode: false
+  minimumTtl: 254
+  passiveMode: false
+  receiveInterval: 179
+  transmitInterval: 180
+---
+apiVersion: metallb.io/v1beta1
+kind: Community
+metadata:
+  annotations:
+    metallb.syn.tools/description: This object is generated from the legacy config
+      parameter
+  labels:
+    name: legacy
+  name: legacy
+  namespace: syn-metallb
+spec:
+  communities:
+    - name: no-advertise
+      value: 65535:65282
+----
+====
+
+.new `class/defaults.yml`
+[%collapsible]
+====
+[source,yaml]
+----
+parameters:
+  metallb:
+    ipAddressPools:
+      default:
+        spec:
+          addresses:
+            - 198.51.100.32/27
+      bgp:
+        spec:
+          addresses:
+            - 198.51.100.64/27
+      bgp2:
+        spec:
+          addresses:
+            - 198.51.100.96/27
+    l2Advertisements:
+      legacy:
+        spec:
+          ipAddressPools:
+            - default
+    bgpAdvertisements: <1>
+      bgp-1:
+        spec:
+          aggregationLength: 32
+          communities:
+            - 64512:1234
+          ipAddressPools:
+            - bgp
+          localPref: 100
+      bgp-2:
+        spec:
+          aggregationLength: 27
+          communities:
+            - 64512:1234
+          ipAddressPools:
+            - bgp
+          localPref: 50
+      bgp2-1:
+        spec:
+          aggregationLength: 32
+          communities:
+            - no-advertise
+          ipAddressPools:
+            - bgp2
+          localPref: 100
+      bgp2-2:
+        spec:
+          aggregationLength: 27
+          ipAddressPools:
+            - bgp2
+    bgpPeers: <2>
+      peer1:
+        spec:
+          bfdProfile: full1
+          myASN: 64500
+          peerASN: 64501
+          peerAddress: 192.0.2.1
+      peer2:
+        spec:
+          myASN: 64500
+          nodeSelectors:
+            - matchExpressions:
+                - key: network-speed
+                  operator: NotIn
+                  values:
+                    - slow
+              matchLabels:
+                rack: frontend
+            - matchExpressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values:
+                    - hostA
+                    - hostB
+          peerASN: 64501
+          peerAddress: 192.0.2.2
+    bfdProfiles:
+      full1:
+        spec:
+          echoInterval: 62
+          echoMode: false
+          minimumTtl: 254
+          passiveMode: false
+          receiveInterval: 179
+          transmitInterval: 180
+    communities:
+      legacy:
+        spec:
+          communities:
+            - name: no-advertise
+              value: 65535:65282
+----
+<1> The component's config migration generates names for the resulting `BGPAdvertisement` custom resources.
+The generated names have form `<address pool name>-X`, where X is the index of the advertisement in the old address pool config plus 1.
+<2> The component's config migration generates names for the resulting `BGPPeer` custom resources.
+The generated names have form `peerX`, where X is the index of the peer in the old config plus 1.
+====
+
+Alternatively, you can also use the https://metallb.universe.tf/configuration/migration_to_crds/[upstream config migration tool] to generate custom resources from a YAML file containing the previously deployed `config` ConfigMap.
+
+== Further references
+
+See the https://metallb.universe.tf/configuration/[upstream documentation] for details on the custom resource-based config.
+The upstream documentation also has https://metallb.universe.tf/apis/[full API documentation] for all custom resources.
