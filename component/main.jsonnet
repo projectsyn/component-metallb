@@ -13,18 +13,19 @@ local simple = import 'simple.libsonnet';
 local metallbVersion =
   local ver = params.charts.metallb.version;
   local verparts = std.split(ver, '.');
-  local parseOrWarn(val, typ) =
+  local parseOrError(val, typ) =
     local parsed = std.parseJson(val);
     if std.isNumber(parsed) then
       parsed
     else
-      std.trace(
-        'Failed to parse %s version "%s" as number, returning 0' % [ typ, val ],
-        0
-      );
+      error
+        'Failed to parse %s version "%s" as number' % [
+          typ,
+          val,
+        ];
   {
-    major: parseOrWarn(verparts[0], 'major'),
-    minor: parseOrWarn(verparts[1], 'minor'),
+    major: parseOrError(verparts[0], 'major'),
+    minor: parseOrError(verparts[1], 'minor'),
   };
 
 
