@@ -1,0 +1,67 @@
+# Test legacy config rewriting
+parameters:
+  metallb:
+    config:
+      peers:
+        - peer-address: 192.0.2.1
+          peer-asn: 64501
+          my-asn: 64500
+          bfd-profile: full1
+        - peer-address: 192.0.2.2
+          peer-asn: 64501
+          my-asn: 64500
+          node-selectors:
+            - match-labels:
+                rack: frontend
+              match-expressions:
+                - key: network-speed
+                  operator: NotIn
+                  values: [slow]
+            - match-expressions:
+                - key: kubernetes.io/hostname
+                  operator: In
+                  values: [hostA, hostB]
+      address-pools:
+        - name: default
+          addresses:
+            - 198.51.100.32/27
+          protocol: layer2
+        - name: bgp-minimal
+          addresses:
+            - 198.51.100.0/27
+          protocol: bgp
+        - name: bgp
+          addresses:
+            - 198.51.100.64/27
+          protocol: bgp
+          auto-assign: false
+          bgp-advertisements:
+            - aggregation-length: 32
+              localpref: 100
+              communities:
+                - 64512:1234
+            - aggregation-length: 27
+              localpref: 50
+              communities:
+                - 64512:1234
+        - name: bgp2
+          addresses:
+            - 198.51.100.96/27
+          protocol: bgp
+          auto-assign: false
+          bgp-advertisements:
+            - aggregation-length: 32
+              localpref: 100
+              communities:
+                - no-advertise
+            - aggregation-length: 27
+      bgp-communities:
+        no-advertise: 65535:65282
+      bfd-profiles:
+        - name: full1
+          receive-interval: 179
+          transmit-interval: 180
+          echo-interval: 62
+          echo-mode: false
+          passive-mode: false
+          minimum-ttl: 254

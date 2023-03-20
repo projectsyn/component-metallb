@@ -5,12 +5,18 @@ parameters:
     memberlist_secretkey: ?{vaultkv:${cluster:tenant}/${cluster:name}/metallb-memberlist/secretkey}
     speaker:
       secretname: metallb-memberlist
-    configmap_name: metallb
     charts:
       metallb:
         source: https://metallb.github.io/metallb
-        version: 0.12.1
+        version: 0.13.9
     helm_values:
       speaker:
         secretName: ${metallb:speaker:secretname}
-      existingConfigMap: ${metallb:configmap_name}
+
+    # Config inputs
+    ipAddressPools: {}
+    l2Advertisements: {}
+    bgpPeers: {}
+    bgpAdvertisements: {}
+    communities: {}
+    bfdProfiles: {}

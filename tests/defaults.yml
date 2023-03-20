@@ -1,4 +1,12 @@
 parameters:
   metallb:
-    addresses:
-      - 198.51.100.32/26
+    ipAddressPools:
+      default:
+        spec:
+          addresses:
+            - 198.51.100.32/26
+    l2Advertisements:
+      default:
+        spec:
+          ipAddressPools:
+            - default
