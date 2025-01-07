@@ -17,6 +17,10 @@ local app = argocd.App('metallb', params.namespace) {
   },
 };
 
+local appPath =
+  local project = std.get(std.get(app, 'spec', {}), 'project', 'syn');
+  if project == 'syn' then 'apps' else 'apps-%s' % project;
+
 {
-  metallb: app,
+  ['%s/metallb' % appPath]: app,
 }
