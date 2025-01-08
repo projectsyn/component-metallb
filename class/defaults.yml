@@ -1,5 +1,7 @@
 parameters:
   metallb:
+    =_metadata:
+      multi_tenant: true
     namespace: syn-metallb
     name: metallb
     memberlist_secretkey: ?{vaultkv:${cluster:tenant}/${cluster:name}/metallb-memberlist/secretkey}
