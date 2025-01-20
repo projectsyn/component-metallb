@@ -85,6 +85,27 @@ spec:
           volumeMounts:
             - mountPath: /etc/ml_secret_key
               name: memberlist
+        - args:
+            - --logtostderr
+            - --secure-listen-address=:666
+            - --upstream=http://$(METALLB_HOST):7472/
+            - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+          env:
+            - name: METALLB_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          image: quay.io/brancz/kube-rbac-proxy:v0.18.2
+          imagePullPolicy: IfNotPresent
+          name: kube-rbac-proxy
+          ports:
+            - containerPort: 666
+              name: metricshttps
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+          terminationMessagePolicy: FallbackToLogsOnError
       hostNetwork: true
       nodeSelector:
         kubernetes.io/os: linux

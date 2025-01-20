@@ -70,6 +70,22 @@ spec:
             - mountPath: /tmp/k8s-webhook-server/serving-certs
               name: cert
               readOnly: true
+        - args:
+            - --logtostderr
+            - --secure-listen-address=:666
+            - --upstream=http://127.0.0.1:7472/
+            - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+          image: quay.io/brancz/kube-rbac-proxy:v0.18.2
+          imagePullPolicy: null
+          name: kube-rbac-proxy
+          ports:
+            - containerPort: 666
+              name: metricshttps
+          resources:
+            requests:
+              cpu: 10m
+              memory: 20Mi
+          terminationMessagePolicy: FallbackToLogsOnError
       nodeSelector:
         kubernetes.io/os: linux
       securityContext:
