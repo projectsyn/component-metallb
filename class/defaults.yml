@@ -11,9 +11,18 @@ parameters:
       metallb:
         source: https://metallb.github.io/metallb
         version: 0.13.9
+    images:
+      kube_rbac_proxy:
+        registry: quay.io
+        repository: brancz/kube-rbac-proxy
+        tag: v0.18.2
     helm_values:
       speaker:
         secretName: ${metallb:speaker:secretname}
+      prometheus:
+        rbacProxy:
+          repository: ${metallb:images:kube_rbac_proxy:registry}/${metallb:images:kube_rbac_proxy:repository}
+          tag: ${metallb:images:kube_rbac_proxy:tag}
 
     # Config inputs
     ipAddressPools: {}

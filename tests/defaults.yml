@@ -10,3 +10,8 @@ parameters:
         spec:
           ipAddressPools:
             - default
+
+    # To test with rbac-proxy
+    helm_values:
+      prometheus:
+        secureMetricsPort: 666
