@@ -5,9 +5,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
-  name: webhook-server-cert
+    app.kubernetes.io/version: v0.15.2
+    helm.sh/chart: metallb-0.15.2
+  name: metallb-webhook-cert
+  namespace: syn-metallb
 ---
 apiVersion: v1
 kind: Service
@@ -16,9 +17,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.15.2
+    helm.sh/chart: metallb-0.15.2
   name: metallb-webhook-service
+  namespace: syn-metallb
 spec:
   ports:
     - port: 443
@@ -35,30 +37,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.15.2
+    helm.sh/chart: metallb-0.15.2
   name: metallb-webhook-configuration
 webhooks:
-  - admissionReviewVersions:
-      - v1
-    clientConfig:
-      service:
-        name: metallb-webhook-service
-        namespace: syn-metallb
-        path: /validate-metallb-io-v1beta1-addresspool
-    failurePolicy: Fail
-    name: addresspoolvalidationwebhook.metallb.io
-    rules:
-      - apiGroups:
-          - metallb.io
-        apiVersions:
-          - v1beta1
-        operations:
-          - CREATE
-          - UPDATE
-        resources:
-          - addresspools
-    sideEffects: None
   - admissionReviewVersions:
       - v1
     clientConfig:
