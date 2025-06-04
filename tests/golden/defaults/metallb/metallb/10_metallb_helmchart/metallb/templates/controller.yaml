@@ -6,9 +6,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.15.2
+    helm.sh/chart: metallb-0.15.2
   name: metallb-controller
+  namespace: syn-metallb
 spec:
   selector:
     matchLabels:
@@ -28,13 +29,15 @@ spec:
         - args:
             - --port=7472
             - --log-level=info
-            - --cert-service-name=metallb-webhook-service
+            - --tls-min-version=VersionTLS12
           env:
             - name: METALLB_ML_SECRET_NAME
               value: metallb-memberlist
             - name: METALLB_DEPLOYMENT
               value: metallb-controller
-          image: quay.io/metallb/controller:v0.13.9
+            - name: METALLB_BGP_TYPE
+              value: frr
+          image: quay.io/metallb/controller:v0.15.2
           livenessProbe:
             failureThreshold: 3
             httpGet:
@@ -98,4 +101,4 @@ spec:
         - name: cert
           secret:
             defaultMode: 420
-            secretName: webhook-server-cert
+            secretName: metallb-webhook-cert

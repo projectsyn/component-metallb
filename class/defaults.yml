@@ -10,7 +10,7 @@ parameters:
     charts:
       metallb:
         source: https://metallb.github.io/metallb
-        version: 0.13.9
+        version: 0.15.2
     images:
       kube_rbac_proxy:
         registry: quay.io
