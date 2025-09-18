@@ -75,7 +75,7 @@ spec:
             - --secure-listen-address=:666
             - --upstream=http://127.0.0.1:7472/
             - --tls-cipher-suites=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-          image: quay.io/brancz/kube-rbac-proxy:v0.18.2
+          image: quay.io/brancz/kube-rbac-proxy:v0.20.0
           imagePullPolicy: null
           name: kube-rbac-proxy
           ports:
