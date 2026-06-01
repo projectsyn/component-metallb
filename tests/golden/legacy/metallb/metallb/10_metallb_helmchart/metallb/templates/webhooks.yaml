@@ -5,9 +5,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: webhook-server-cert
+  namespace: syn-metallb
 ---
 apiVersion: v1
 kind: Service
@@ -16,9 +17,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-webhook-service
+  namespace: syn-metallb
 spec:
   ports:
     - port: 443
@@ -35,8 +37,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-webhook-configuration
 webhooks:
   - admissionReviewVersions:
