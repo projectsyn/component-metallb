@@ -5,8 +5,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb:controller
 rules:
   - apiGroups:
@@ -18,6 +18,12 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - ''
+    resources:
+      - nodes
+    verbs:
+      - list
   - apiGroups:
       - ''
     resources:
@@ -101,8 +107,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb:speaker
 rules:
   - apiGroups:
@@ -151,8 +157,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb:controller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -170,8 +176,8 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb:speaker
 roleRef:
   apiGroup: rbac.authorization.k8s.io
@@ -189,9 +195,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-pod-lister
+  namespace: syn-metallb
 rules:
   - apiGroups:
       - ''
@@ -203,6 +210,14 @@ rules:
       - ''
     resources:
       - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ''
+    resources:
+      - configmaps
     verbs:
       - get
       - list
@@ -271,9 +286,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-controller
+  namespace: syn-metallb
 rules:
   - apiGroups:
       - ''
@@ -373,9 +389,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-pod-lister
+  namespace: syn-metallb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -391,9 +408,10 @@ metadata:
     app.kubernetes.io/instance: metallb
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: metallb
-    app.kubernetes.io/version: v0.13.9
-    helm.sh/chart: metallb-0.13.9
+    app.kubernetes.io/version: v0.13.12
+    helm.sh/chart: metallb-0.13.12
   name: metallb-controller
+  namespace: syn-metallb
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
